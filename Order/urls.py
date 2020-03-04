@@ -5,7 +5,7 @@ from Order.views import(
     OrderDetailAPIView,
     OrderShipperUpdateAPIView,
     OrderEmployeeUpdateAPIView,
-    OrderStatusUpdateAPIView
+    
 )
 
 urlpatterns = [
@@ -14,6 +14,5 @@ path('all', OrderListAPIView.as_view()),
 path('detail/<int:pk>', OrderDetailAPIView.as_view()),
 
 path('shipper/update/<int:pk>', OrderShipperUpdateAPIView.as_view()),
-path('employee/update/<int:pk>', OrderEmployeeUpdateAPIView.as_view()),
-path('status/update/<int:pk>', OrderStatusUpdateAPIView.as_view())
+path('employee/update/<int:pk>', OrderEmployeeUpdateAPIView.as_view())
 ]

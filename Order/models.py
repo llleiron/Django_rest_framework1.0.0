@@ -6,7 +6,7 @@ from datetime import datetime
 # Create your models here.
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, null=True)
     shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE, null=True)
     orderDate = models.DateTimeField(default=datetime.now)

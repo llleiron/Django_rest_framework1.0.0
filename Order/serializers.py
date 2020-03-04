@@ -6,7 +6,6 @@ from Order.models import Order
 class OrderCreateSerializer(serializers.ModelSerializer):
 
     customer_id = serializers.IntegerField()
-    
 
     class Meta:
         model = Order
@@ -27,6 +26,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
         order = Order(
             customer=customer
+
         )
         order.save()
         return order
@@ -46,12 +46,20 @@ class AttachShipperSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('id', 'shipper')
 
-class AttachEmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ('id', 'employee')
+class AttachEmployeeSerializer(serializers.ModelSerializer): 
+    employee_id = serializers.IntegerField()
 
-class AttachStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('YndunvacE','YndunelE', 'BerumE', 'STATUS_CHOICES','status')
+        fields = ['employee_id']
+    
+    def update(self, instance, validated_data):
+        instance.employee_id = validated_data.get('employee_id', instance.employee_id)
+        instance.status = 'YE'
+        # try:
+        #     employee = Employee.objects.get(pk=employee_id)
+        # except Employee.DoesNotExist:
+        #     raise serializers.ValidationError('Employee does not exist, please enter correct customer id')
+        
+        instance.save()
+        return instance

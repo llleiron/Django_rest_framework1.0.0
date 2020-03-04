@@ -1,5 +1,5 @@
 from rest_framework import generics
-from Order.serializers import AttachStatusSerializer,OrderCreateSerializer, OrderDetailSerializer, OrderListSerializer, AttachShipperSerializer, AttachEmployeeSerializer
+from Order.serializers import OrderCreateSerializer, OrderDetailSerializer, OrderListSerializer, AttachShipperSerializer, AttachEmployeeSerializer
 from Order.models import Order 
 # Create your views here.
 class OrderCreateAPIView(generics.CreateAPIView):
@@ -21,8 +21,3 @@ class OrderShipperUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderEmployeeUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AttachEmployeeSerializer
     queryset = Order.objects.all()
-
-class OrderStatusUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = AttachStatusSerializer
-    queryset = Order.objects.all()
-    
