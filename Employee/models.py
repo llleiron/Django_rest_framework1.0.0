@@ -7,3 +7,6 @@ class Employee(models.Model):
     BirthDate = models.DateField(verbose_name='BirthDate')
     Photo = models.FileField(verbose_name='Photo')
     Notes = models.CharField(verbose_name='Notes', max_length=500)
+
+    def __str__(self):
+        return str(self.id)

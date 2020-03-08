@@ -8,3 +8,6 @@ class Customer(models.Model):
     City = models.CharField(verbose_name='City', max_length=64)
     PostalCode = models.CharField(verbose_name='PostalCode', max_length=64)
     Country = models.CharField(verbose_name='Country', max_length=64)
+
+    def __str__(self):
+        return self.id

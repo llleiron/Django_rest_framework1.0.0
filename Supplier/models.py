@@ -8,3 +8,6 @@ class Supplier(models.Model):
     PostalCode = models.CharField(verbose_name = 'PostalCode', max_length = 64, blank = False)
     Country = models.CharField(verbose_name = 'Country', max_length = 50, blank = False)
     Phone = models.IntegerField(verbose_name = 'Phone', blank = False)
+
+    def __str__(self):
+        return str(self.id)

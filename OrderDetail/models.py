@@ -6,3 +6,6 @@ class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete = models.CASCADE)
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
     Quantity = models.CharField(verbose_name='Quantity', max_length=10)
+
+    def __str__(self):
+        return str(self.id)

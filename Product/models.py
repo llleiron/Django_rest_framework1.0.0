@@ -8,3 +8,6 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete = models.CASCADE)
     Unit = models.CharField(verbose_name = 'Unit', max_length = 10 )
     Price = models.CharField(verbose_name = 'Price', max_length = 10)
+
+    def __str__(self):
+        return str(self.id)

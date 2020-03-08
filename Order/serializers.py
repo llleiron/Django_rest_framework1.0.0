@@ -23,10 +23,9 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             customer = Customer.objects.get(pk=customer_id)
         except Customer.DoesNotExist:
             raise serializers.ValidationError('Customer does not exist, please enter correct customer id')
-
         order = Order(
-            customer=customer
-
+            customer=customer,
+            status="pending"
         )
         order.save()
         return order
@@ -42,9 +41,22 @@ class OrderListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AttachShipperSerializer(serializers.ModelSerializer):
+    shipper_id = serializers.IntegerField()
+    employee_id = serializers.IntegerField(allow_null=False, read_only=True)
     class Meta:
         model = Order
-        fields = ('id', 'shipper')
+        fields = ['shipper_id', 'employee_id'] 
+    
+    def update(self, instance, validated_data):
+        instance.shipper_id = validated_data.get('shipper_id', instance.shipper_id)
+        instance.employee_id = validated_data.get('employee_id', instance.employee_id)
+        try:
+            employee = Employee.objects.get(pk=instance.employee_id)
+        except Employee.DoesNotExist:
+            raise serializers.ValidationError('You need to attach employee , before attaching shipper , attach employee and try again')
+        instance.status = 'delivered'
+        instance.save()
+        return instance
 
 class AttachEmployeeSerializer(serializers.ModelSerializer): 
     employee_id = serializers.IntegerField()
@@ -55,11 +67,34 @@ class AttachEmployeeSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         instance.employee_id = validated_data.get('employee_id', instance.employee_id)
-        instance.status = 'YE'
-        # try:
-        #     employee = Employee.objects.get(pk=employee_id)
-        # except Employee.DoesNotExist:
-        #     raise serializers.ValidationError('Employee does not exist, please enter correct customer id')
-        
+        instance.status = 'accepted'
+    
         instance.save()
         return instance
+
+class PendingCountSerializer(serializers.ModelSerializer):
+    pending_count = serializers.SerializerMethodField()
+    class Meta:
+        model = Order
+        fields = ['pending_count']
+    def get_pending_count(self, status):
+        pending_count = Order.objects.filter(status="pending").count()
+        return pending_count
+
+class AcceptedCountSerializer(serializers.ModelSerializer):
+    accepted_count = serializers.SerializerMethodField()
+    class Meta:
+        model = Order
+        fields = ['accepted_count']
+    def get_accepted_count(self, status):
+        accepted_count = Order.objects.filter(status="accepted").count()
+        return accepted_count
+
+class DeliveredCountSerializer(serializers.ModelSerializer):
+    delivered_count = serializers.SerializerMethodField()
+    class Meta:
+        model = Order
+        fields = ['delivered']
+    def get_pending_count(self, status):
+        delivered_count = Order.objects.filter(status="delivered").count()
+        return delivered_count
